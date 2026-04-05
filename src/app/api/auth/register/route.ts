@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
-import { getClient, initDb } from '@/lib/db'
+import { getDb, initDb } from '@/lib/db'
 import { signToken } from '@/lib/auth'
 
 export async function POST(req: NextRequest) {
@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     if (!name || !email || !password)
       return NextResponse.json({ error: 'جميع الحقول مطلوبة' }, { status: 400 })
 
-    const db = getClient()
+    const db = getDb()
     const existing = await db.execute({ sql: 'SELECT id FROM users WHERE email=?', args: [email] })
     if (existing.rows.length > 0)
       return NextResponse.json({ error: 'البريد الإلكتروني مسجّل مسبقاً' }, { status: 409 })

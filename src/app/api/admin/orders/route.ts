@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getClient, initDb } from '@/lib/db'
+import { getDb, initDb } from '@/lib/db'
 import { getUser } from '@/lib/auth'
 
 export async function GET() {
   const user = await getUser()
   if (!user || user.role !== 'admin') return NextResponse.json({ error: 'غير مصرح' }, { status: 403 })
   await initDb()
-  const db = getClient()
+  const db = getDb()
 
   const ordersResult = await db.execute(`
     SELECT o.*, u.name as user_name, u.email as user_email, u.phone as user_phone
@@ -28,7 +28,7 @@ export async function PATCH(req: NextRequest) {
   if (!user || user.role !== 'admin') return NextResponse.json({ error: 'غير مصرح' }, { status: 403 })
   try {
     const { order_id, status, notes } = await req.json()
-    const db = getClient()
+    const db = getDb()
     await db.execute({
       sql: `UPDATE orders SET status=?, notes=?, updated_at=CURRENT_TIMESTAMP WHERE id=?`,
       args: [status, notes || '', order_id]

@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getClient, getSettings, getPriceTiers, getRateForAmount, initDb } from '@/lib/db'
+import { getDb, getSettings, getPriceTiers, getRateForAmount, initDb } from '@/lib/db'
 import { getUser } from '@/lib/auth'
 
 export async function GET() {
   const user = await getUser()
   if (!user) return NextResponse.json({ error: 'غير مصرح' }, { status: 401 })
   await initDb()
-  const db = getClient()
+  const db = getDb()
   const result = await db.execute({
     sql: `SELECT o.*, u.name as user_name, u.email as user_email, u.phone as user_phone
           FROM orders o JOIN users u ON o.user_id = u.id
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
 
     const rate = getRateForAmount(usdt_amount, tiers)
     const sar_amount = usdt_amount * rate
-    const db = getClient()
+    const db = getDb()
     const result = await db.execute({
       sql: `INSERT INTO orders (user_id, usdt_amount, sar_amount, rate, wallet_address, payment_method) VALUES (?, ?, ?, ?, ?, ?)`,
       args: [user.id, usdt_amount, sar_amount, rate, wallet_address, payment_method]

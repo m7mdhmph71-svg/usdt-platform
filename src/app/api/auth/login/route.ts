@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
-import { getClient, initDb } from '@/lib/db'
+import { getDb, initDb } from '@/lib/db'
 import { signToken } from '@/lib/auth'
 
 export async function POST(req: NextRequest) {
   try {
     await initDb()
     const { email, password } = await req.json()
-    const db = getClient()
+    const db = getDb()
     const result = await db.execute({ sql: 'SELECT * FROM users WHERE email=?', args: [email] })
     const user = result.rows[0]
 

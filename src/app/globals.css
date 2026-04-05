@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #0f172a;
+  color: #f1f5f9;
+}
+
+[dir="rtl"] body {
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-primary {
+  @apply bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200 cursor-pointer;
+}
+
+.btn-secondary {
+  @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200 cursor-pointer;
+}
+
+.input-field {
+  @apply w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 transition-colors;
+}
+
+.card {
+  @apply bg-slate-800 border border-slate-700 rounded-2xl p-6;
+}
+
+.status-pending  { @apply bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 px-3 py-1 rounded-full text-sm; }
+.status-confirmed { @apply bg-blue-500/20 text-blue-300 border border-blue-500/30 px-3 py-1 rounded-full text-sm; }
+.status-completed { @apply bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-3 py-1 rounded-full text-sm; }
+.status-cancelled { @apply bg-red-500/20 text-red-300 border border-red-500/30 px-3 py-1 rounded-full text-sm; }

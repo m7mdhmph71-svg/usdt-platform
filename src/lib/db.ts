@@ -58,12 +58,23 @@ export async function initDb() {
     )`,
   ])
 
-  const existingBank = await db.execute("SELECT value FROM settings WHERE key='bank_name'")
-  if (existingBank.rows.length === 0) {
+  // Always upsert bank details so they update when changed in code
+  await db.batch([
+    `INSERT OR REPLACE INTO settings (key, value) VALUES ('bank_name', 'Lead Bank')`,
+    `INSERT OR REPLACE INTO settings (key, value) VALUES ('bank_iban', '216267974507')`,
+    `INSERT OR REPLACE INTO settings (key, value) VALUES ('bank_account_name', 'mohamad sakher abdulrazak')`,
+    `INSERT OR REPLACE INTO settings (key, value) VALUES ('bank_account_holder', 'mohamad sakher abdulrazak')`,
+    `INSERT OR REPLACE INTO settings (key, value) VALUES ('bank_account_type', 'Checking')`,
+    `INSERT OR REPLACE INTO settings (key, value) VALUES ('bank_country_code', 'US')`,
+    `INSERT OR REPLACE INTO settings (key, value) VALUES ('bank_ach_routing', '101019644')`,
+    `INSERT OR REPLACE INTO settings (key, value) VALUES ('bank_wire_routing', '101019644')`,
+    `INSERT OR REPLACE INTO settings (key, value) VALUES ('bank_address', '1801 Main St., Kansas City, MO 64108')`,
+  ])
+
+  // Only insert price/limit settings if they don't exist yet
+  const existingPrices = await db.execute("SELECT value FROM settings WHERE key='min_order'")
+  if (existingPrices.rows.length === 0) {
     await db.batch([
-      `INSERT OR IGNORE INTO settings (key, value) VALUES ('bank_name', 'البنك الأهلي السعودي')`,
-      `INSERT OR IGNORE INTO settings (key, value) VALUES ('bank_iban', 'SA12 3456 7890 1234 5678 90')`,
-      `INSERT OR IGNORE INTO settings (key, value) VALUES ('bank_account_name', 'شركة الثقة للعملات الرقمية')`,
       `INSERT OR IGNORE INTO settings (key, value) VALUES ('min_order', '1')`,
       `INSERT OR IGNORE INTO settings (key, value) VALUES ('max_order', '50000')`,
       `INSERT OR IGNORE INTO settings (key, value) VALUES ('price_tiers', '[{"min":1,"max":49,"rate":4.3},{"min":50,"max":100,"rate":4.2},{"min":101,"max":200,"rate":4.0},{"min":201,"max":999999,"rate":3.9}]')`,

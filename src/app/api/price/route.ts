@@ -19,5 +19,11 @@ export async function GET(req: NextRequest) {
     bank_name: settings.bank_name,
     bank_iban: settings.bank_iban,
     bank_account_name: settings.bank_account_name,
+    bank_account_holder: settings.bank_account_holder,
+    bank_account_type: settings.bank_account_type,
+    bank_country_code: settings.bank_country_code,
+    bank_ach_routing: settings.bank_ach_routing,
+    bank_wire_routing: settings.bank_wire_routing,
+    bank_address: settings.bank_address,
   })
 }

@@ -15,6 +15,12 @@ interface Settings {
   bank_name: string
   bank_iban: string
   bank_account_name: string
+  bank_account_holder: string
+  bank_account_type: string
+  bank_country_code: string
+  bank_ach_routing: string
+  bank_wire_routing: string
+  bank_address: string
 }
 
 function getRateForAmount(amount: number, tiers: PriceTier[]): number {
@@ -26,7 +32,9 @@ export default function NewOrderPage() {
   const [lang, setLang] = useState<Lang>('ar')
   const [settings, setSettings] = useState<Settings>({
     rate: 4.3, tiers: [], min_order: 1, max_order: 50000,
-    bank_name: '', bank_iban: '', bank_account_name: ''
+    bank_name: '', bank_iban: '', bank_account_name: '',
+    bank_account_holder: '', bank_account_type: '', bank_country_code: '',
+    bank_ach_routing: '', bank_wire_routing: '', bank_address: ''
   })
   const [usdtAmount, setUsdtAmount] = useState('')
   const [wallet, setWallet] = useState('')
@@ -98,13 +106,37 @@ export default function NewOrderPage() {
                     <span className="text-white font-medium">{settings.bank_name}</span>
                   </div>
                   <div className="flex justify-between gap-4">
-                    <span className="text-slate-400 shrink-0">{t.bank_iban}:</span>
-                    <span className="text-white font-mono text-xs">{settings.bank_iban}</span>
+                    <span className="text-slate-400 shrink-0">{t.account_name}:</span>
+                    <span className="text-white">{settings.bank_account_holder || settings.bank_account_name}</span>
                   </div>
                   <div className="flex justify-between gap-4">
-                    <span className="text-slate-400 shrink-0">{t.account_name}:</span>
-                    <span className="text-white">{settings.bank_account_name}</span>
+                    <span className="text-slate-400 shrink-0">{isRtl ? 'رقم الحساب:' : 'Account No.'}:</span>
+                    <span className="text-white font-mono text-xs">{settings.bank_iban}</span>
                   </div>
+                  {settings.bank_account_type && (
+                    <div className="flex justify-between gap-4">
+                      <span className="text-slate-400 shrink-0">{isRtl ? 'نوع الحساب:' : 'Account Type'}:</span>
+                      <span className="text-white">{settings.bank_account_type}</span>
+                    </div>
+                  )}
+                  {settings.bank_ach_routing && (
+                    <div className="flex justify-between gap-4">
+                      <span className="text-slate-400 shrink-0">ACH Routing:</span>
+                      <span className="text-white font-mono text-xs">{settings.bank_ach_routing}</span>
+                    </div>
+                  )}
+                  {settings.bank_wire_routing && (
+                    <div className="flex justify-between gap-4">
+                      <span className="text-slate-400 shrink-0">Wire Routing:</span>
+                      <span className="text-white font-mono text-xs">{settings.bank_wire_routing}</span>
+                    </div>
+                  )}
+                  {settings.bank_address && (
+                    <div className="flex justify-between gap-4">
+                      <span className="text-slate-400 shrink-0">{isRtl ? 'عنوان البنك:' : 'Bank Address'}:</span>
+                      <span className="text-white text-xs text-end">{settings.bank_address}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between border-t border-slate-700 pt-2 mt-2">
                     <span className="text-slate-400">{isRtl ? 'المبلغ المطلوب:' : 'Amount to transfer:'}</span>
                     <span className="text-emerald-400 font-bold text-lg">{sarAmount} {isRtl ? 'ريال' : 'SAR'}</span>
@@ -243,8 +275,12 @@ export default function NewOrderPage() {
                 <h4 className="text-emerald-400 text-sm font-semibold mb-3">{t.bank_details}</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between gap-4"><span className="text-slate-500 shrink-0">{t.bank_name}:</span><span className="text-white">{settings.bank_name}</span></div>
-                  <div className="flex justify-between gap-4"><span className="text-slate-500 shrink-0">{t.bank_iban}:</span><span className="text-white font-mono text-xs">{settings.bank_iban}</span></div>
-                  <div className="flex justify-between gap-4"><span className="text-slate-500 shrink-0">{t.account_name}:</span><span className="text-white">{settings.bank_account_name}</span></div>
+                  <div className="flex justify-between gap-4"><span className="text-slate-500 shrink-0">{t.account_name}:</span><span className="text-white">{settings.bank_account_holder || settings.bank_account_name}</span></div>
+                  <div className="flex justify-between gap-4"><span className="text-slate-500 shrink-0">{isRtl ? 'رقم الحساب:' : 'Account No.'}:</span><span className="text-white font-mono text-xs">{settings.bank_iban}</span></div>
+                  {settings.bank_account_type && <div className="flex justify-between gap-4"><span className="text-slate-500 shrink-0">{isRtl ? 'نوع الحساب:' : 'Account Type'}:</span><span className="text-white">{settings.bank_account_type}</span></div>}
+                  {settings.bank_ach_routing && <div className="flex justify-between gap-4"><span className="text-slate-500 shrink-0">ACH Routing:</span><span className="text-white font-mono text-xs">{settings.bank_ach_routing}</span></div>}
+                  {settings.bank_wire_routing && <div className="flex justify-between gap-4"><span className="text-slate-500 shrink-0">Wire Routing:</span><span className="text-white font-mono text-xs">{settings.bank_wire_routing}</span></div>}
+                  {settings.bank_address && <div className="flex justify-between gap-4"><span className="text-slate-500 shrink-0">{isRtl ? 'عنوان البنك:' : 'Bank Address'}:</span><span className="text-white text-xs text-end">{settings.bank_address}</span></div>}
                 </div>
                 <p className="text-slate-500 text-xs mt-3">{t.transfer_note}</p>
               </div>

@@ -63,7 +63,7 @@ export const translations = {
     bank_name: 'اسم البنك',
     bank_iban: 'رقم IBAN',
     account_name: 'اسم الحساب',
-    transfer_note: 'قم بتحويل المبلغ إلى الحساب أعلاه، ثم قدّم الطلب وسنتحقق ونرسل USDT خلال ساعة.',
+    transfer_note: 'قم بتحويل المبلغ إلى الحساب أعلاه ثم قدّم الطلب. ملاحظة: قد تتأخر الأموال في الوصول بسبب أوقات معالجة البنوك — سيتم إرسال USDT فور استلام المبلغ في حسابنا.',
     card_note: 'خدمة الدفع بالبطاقة قريباً. يرجى استخدام التحويل البنكي حالياً.',
     order_success: 'تم إرسال طلبك بنجاح! سنتواصل معك قريباً.',
 
@@ -143,7 +143,7 @@ export const translations = {
     bank_name: 'Bank Name',
     bank_iban: 'IBAN',
     account_name: 'Account Name',
-    transfer_note: 'Transfer the amount to the account above, then submit the order and we will verify and send USDT within 1 hour.',
+    transfer_note: 'Transfer the amount to the above account, then submit your order. Note: bank transfers may take time to arrive — USDT will be sent as soon as funds are received in our account.',
     card_note: 'Credit card payment coming soon. Please use bank transfer for now.',
     order_success: 'Order submitted successfully! We will contact you soon.',
 

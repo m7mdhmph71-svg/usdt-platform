@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
       args: [user.id, usdt_amount, sar_amount, rate, wallet_address, payment_method]
     })
 
-    const order_id = result.lastInsertRowid
+    const order_id = result.lastInsertRowid as bigint
 
     // If card payment → create Paylink invoice
     if (payment_method === 'card') {

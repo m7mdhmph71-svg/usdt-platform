@@ -197,7 +197,7 @@ export default function NewOrderPage() {
                       )}
                     </span>
                     <span className={`font-bold ${isActive ? 'text-emerald-400 text-lg' : 'text-white'}`}>
-                      {tier.rate} {isRtl ? 'ريال' : 'SAR'}
+                      {tier.rate} ﷼
                     </span>
                   </div>
                 )
@@ -214,11 +214,11 @@ export default function NewOrderPage() {
           {/* Amount */}
           <div className="card">
             <label className="block text-white font-medium mb-3">{t.usdt_amount}</label>
-            <div className="relative">
+            <div className="relative" dir="ltr">
               <input
                 type="number" value={usdtAmount}
                 onChange={e => setUsdtAmount(e.target.value)}
-                className="input-field pr-16 text-xl font-bold"
+                className="input-field pr-16 text-xl font-bold text-right"
                 placeholder="100"
                 min={settings.min_order} max={settings.max_order} step="1" required
               />
@@ -310,7 +310,15 @@ export default function NewOrderPage() {
 
             {paymentMethod === 'card' && (
               <div className="mt-4 bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
-                <p className="text-blue-300 text-sm">🚧 {t.card_note}</p>
+                <p className="text-blue-300 text-sm font-medium mb-2">💳 {t.card_note}</p>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {['Mada','Visa','Mastercard','Apple Pay','STC Pay'].map(m => (
+                    <span key={m} className="text-xs bg-slate-800 border border-slate-600 text-slate-300 px-2 py-1 rounded-lg">{m}</span>
+                  ))}
+                </div>
+                {cardFee > 0 && (
+                  <p className="text-yellow-400 text-xs mt-3">⚠️ {isRtl ? `تشمل رسوم معالجة 2% (${cardFee.toFixed(2)} ﷼)` : `Includes 2% processing fee (${cardFee.toFixed(2)} SAR)`}</p>
+                )}
               </div>
             )}
           </div>

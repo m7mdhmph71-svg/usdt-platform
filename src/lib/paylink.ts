@@ -1,6 +1,8 @@
 const PAYLINK_APP_ID = process.env.PAYLINK_APP_ID || 'APP_ID_1756653001673'
 const PAYLINK_SECRET_KEY = process.env.PAYLINK_SECRET_KEY || '9118993e-5100-3141-b6ec-aba296d59f9d'
-const PAYLINK_BASE_URL = 'https://restapi.paylink.sa'
+const PAYLINK_BASE_URL = process.env.PAYLINK_ENV === 'production'
+  ? 'https://restapi.paylink.sa'
+  : 'https://restpilot.paylink.sa'
 
 export async function getPaylinkToken(): Promise<string> {
   const res = await fetch(`${PAYLINK_BASE_URL}/api/auth`, {
@@ -13,7 +15,7 @@ export async function getPaylinkToken(): Promise<string> {
     })
   })
   const data = await res.json()
-  if (!data.id_token) throw new Error('Paylink auth failed')
+  if (!data.id_token) throw new Error(`Paylink auth failed: ${JSON.stringify(data)}`)
   return data.id_token
 }
 

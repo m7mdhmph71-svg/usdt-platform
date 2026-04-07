@@ -53,16 +53,23 @@ export async function POST(req: NextRequest) {
 
     // If card payment → create Paylink invoice
     if (payment_method === 'card') {
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://usdt-platform.vercel.app'
-      const invoice = await createPaylinkInvoice({
-        orderId: order_id,
-        amountSar: sar_amount,
-        usdtAmount: usdt_amount,
-        clientName: user.name,
-        clientEmail: user.email,
-        clientPhone: '0500000000',
-        baseUrl
-      })
+      let invoice
+      try {
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://usdt-platform.vercel.app'
+        invoice = await createPaylinkInvoice({
+          orderId: order_id,
+          amountSar: sar_amount,
+          usdtAmount: usdt_amount,
+          clientName: user.name,
+          clientEmail: user.email,
+          clientPhone: '0500000000',
+          baseUrl
+        })
+      } catch (paylinkErr) {
+        console.error('Paylink error:', paylinkErr)
+        await db.execute({ sql: `DELETE FROM orders WHERE id = ?`, args: [order_id] })
+        return NextResponse.json({ error: 'فشل في إنشاء رابط الدفع — تحقق من إعدادات Paylink' }, { status: 500 })
+      }
 
       if (invoice?.url) {
         // Save Paylink transaction number in notes
@@ -78,7 +85,8 @@ export async function POST(req: NextRequest) {
           payment_url: invoice.url
         })
       } else {
-        // Paylink failed - delete order and return error
+        // Paylink returned no URL - delete order and return error
+        console.error('Paylink no URL:', JSON.stringify(invoice))
         await db.execute({ sql: `DELETE FROM orders WHERE id = ?`, args: [order_id] })
         return NextResponse.json({ error: 'فشل في إنشاء رابط الدفع، حاول مجدداً' }, { status: 500 })
       }

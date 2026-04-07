@@ -105,7 +105,7 @@ export default function NewOrderPage() {
             <div className="text-6xl mb-4">✅</div>
             <h2 className="text-2xl font-bold text-white mb-2">{t.order_success}</h2>
             <p className="text-slate-400 text-sm mb-6">
-              {amount} USDT × {currentRate} = <span className="text-emerald-400 font-bold">{sarAmount} {isRtl ? 'ريال' : 'SAR'}</span>
+              {amount} USDT × {currentRate} = <span className="text-emerald-400 font-bold">{sarAmount} {isRtl ? 'ر.س' : 'SAR'}</span>
             </p>
             {paymentMethod === 'bank' && (
               <div className="bg-slate-900 rounded-xl p-4 mb-6 text-start">
@@ -149,7 +149,7 @@ export default function NewOrderPage() {
                   )}
                   <div className="flex justify-between border-t border-slate-700 pt-2 mt-2">
                     <span className="text-slate-400">{isRtl ? 'المبلغ المطلوب:' : 'Amount to transfer:'}</span>
-                    <span className="text-emerald-400 font-bold text-lg">{sarAmount} {isRtl ? 'ريال' : 'SAR'}</span>
+                    <span className="text-emerald-400 font-bold text-lg">{sarAmount} {isRtl ? 'ر.س' : 'SAR'}</span>
                   </div>
                 </div>
                 <p className="text-slate-500 text-xs mt-3">{t.transfer_note}</p>
@@ -197,7 +197,7 @@ export default function NewOrderPage() {
                       )}
                     </span>
                     <span className={`font-bold ${isActive ? 'text-emerald-400 text-lg' : 'text-white'}`}>
-                      {tier.rate} ﷼
+                      {tier.rate} ر.س
                     </span>
                   </div>
                 )
@@ -230,23 +230,23 @@ export default function NewOrderPage() {
               <div className="mt-4 bg-slate-900 rounded-xl p-4">
                 <div className="flex justify-between items-center text-sm mb-2">
                   <span className="text-slate-400">{isRtl ? 'السعر المطبّق:' : 'Rate applied:'}</span>
-                  <span className="text-emerald-400 font-semibold">{currentRate} {isRtl ? 'ريال/USDT' : 'SAR/USDT'}</span>
+                  <span className="text-emerald-400 font-semibold">{currentRate} {isRtl ? 'ر.س/USDT' : 'SAR/USDT'}</span>
                 </div>
                 {paymentMethod === 'card' && (
                   <>
                     <div className="flex justify-between items-center text-sm mb-2">
                       <span className="text-slate-400">{isRtl ? 'المبلغ الأساسي:' : 'Base amount:'}</span>
-                      <span className="text-white">{sarAmountBase.toFixed(2)} {isRtl ? 'ريال' : 'SAR'}</span>
+                      <span className="text-white">{sarAmountBase.toFixed(2)} {isRtl ? 'ر.س' : 'SAR'}</span>
                     </div>
                     <div className="flex justify-between items-center text-sm mb-2">
                       <span className="text-yellow-400">{isRtl ? 'رسوم البطاقة (2%):' : 'Card fee (2%):'}</span>
-                      <span className="text-yellow-400">+{cardFee.toFixed(2)} {isRtl ? 'ريال' : 'SAR'}</span>
+                      <span className="text-yellow-400">+{cardFee.toFixed(2)} {isRtl ? 'ر.س' : 'SAR'}</span>
                     </div>
                   </>
                 )}
                 <div className="flex justify-between items-center border-t border-slate-700 pt-2">
                   <span className="text-slate-400">{t.you_pay}</span>
-                  <span className="text-2xl font-bold text-white">{sarAmount} <span className="text-slate-400 text-base">{isRtl ? 'ريال' : 'SAR'}</span></span>
+                  <span className="text-2xl font-bold text-white">{sarAmount} <span className="text-slate-400 text-base">{isRtl ? 'ر.س' : 'SAR'}</span></span>
                 </div>
               </div>
             )}
@@ -317,7 +317,7 @@ export default function NewOrderPage() {
                   ))}
                 </div>
                 {cardFee > 0 && (
-                  <p className="text-yellow-400 text-xs mt-3">⚠️ {isRtl ? `تشمل رسوم معالجة 2% (${cardFee.toFixed(2)} ﷼)` : `Includes 2% processing fee (${cardFee.toFixed(2)} SAR)`}</p>
+                  <p className="text-yellow-400 text-xs mt-3">⚠️ {isRtl ? `تشمل رسوم معالجة 2% (${cardFee.toFixed(2)} ر.س)` : `Includes 2% processing fee (${cardFee.toFixed(2)} SAR)`}</p>
                 )}
               </div>
             )}
@@ -325,7 +325,7 @@ export default function NewOrderPage() {
 
           <button type="submit" disabled={loading || !usdtAmount || !wallet}
             className="btn-primary w-full text-lg py-4 disabled:opacity-50">
-            {loading ? '...' : `${t.submit_order} — ${sarAmount} ${isRtl ? 'ريال' : 'SAR'}`}
+            {loading ? '...' : `${t.submit_order} — ${sarAmount} ${isRtl ? 'ر.س' : 'SAR'}`}
           </button>
         </form>
       </div>

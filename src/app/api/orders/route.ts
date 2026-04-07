@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { getDb, getSettings, getPriceTiers, getRateForAmount, initDb } from '@/lib/db'
 import { getUser } from '@/lib/auth'
+import { createPaylinkInvoice } from '@/lib/paylink'
 
 export async function GET() {
   const user = await getUser()
@@ -38,11 +39,49 @@ export async function POST(req: NextRequest) {
     const rate = getRateForAmount(usdt_amount, tiers)
     const sar_amount = usdt_amount * rate
     const db = getDb()
+
+    // Create order in DB
     const result = await db.execute({
       sql: `INSERT INTO orders (user_id, usdt_amount, sar_amount, rate, wallet_address, payment_method) VALUES (?, ?, ?, ?, ?, ?)`,
       args: [user.id, usdt_amount, sar_amount, rate, wallet_address, payment_method]
     })
-    return NextResponse.json({ success: true, order_id: result.lastInsertRowid, rate, sar_amount })
+
+    const order_id = result.lastInsertRowid
+
+    // If card payment → create Paylink invoice
+    if (payment_method === 'card') {
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://usdt-platform.vercel.app'
+      const invoice = await createPaylinkInvoice({
+        orderId: order_id,
+        amountSar: sar_amount,
+        usdtAmount: usdt_amount,
+        clientName: user.name,
+        clientEmail: user.email,
+        clientPhone: '0500000000',
+        baseUrl
+      })
+
+      if (invoice?.url) {
+        // Save Paylink transaction number in notes
+        await db.execute({
+          sql: `UPDATE orders SET notes = ? WHERE id = ?`,
+          args: [`paylink_tx:${invoice.transactionNo}`, order_id]
+        })
+        return NextResponse.json({
+          success: true,
+          order_id,
+          rate,
+          sar_amount,
+          payment_url: invoice.url
+        })
+      } else {
+        // Paylink failed - delete order and return error
+        await db.execute({ sql: `DELETE FROM orders WHERE id = ?`, args: [order_id] })
+        return NextResponse.json({ error: 'فشل في إنشاء رابط الدفع، حاول مجدداً' }, { status: 500 })
+      }
+    }
+
+    return NextResponse.json({ success: true, order_id, rate, sar_amount })
   } catch (e) {
     console.error(e)
     return NextResponse.json({ error: 'حدث خطأ' }, { status: 500 })

@@ -83,6 +83,13 @@ export default function NewOrderPage() {
     setLoading(false)
 
     if (!res.ok) { setError(data.error); return }
+
+    // Card payment → redirect to Paylink
+    if (paymentMethod === 'card' && data.payment_url) {
+      window.location.href = data.payment_url
+      return
+    }
+
     setSuccess(true)
   }
 

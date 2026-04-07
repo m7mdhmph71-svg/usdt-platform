@@ -64,7 +64,7 @@ export const translations = {
     bank_iban: 'رقم IBAN',
     account_name: 'اسم الحساب',
     transfer_note: 'قم بتحويل المبلغ إلى الحساب أعلاه ثم قدّم الطلب. ملاحظة: قد تتأخر الأموال في الوصول بسبب أوقات معالجة البنوك — سيتم إرسال USDT فور استلام المبلغ في حسابنا.',
-    card_note: 'خدمة الدفع بالبطاقة قريباً. يرجى استخدام التحويل البنكي حالياً.',
+    card_note: 'ادفع بأمان عبر Paylink — يدعم Mada وVisa وMastercard وApple Pay وSTC Pay.',
     order_success: 'تم إرسال طلبك بنجاح! سنتواصل معك قريباً.',
 
     // Status
@@ -144,7 +144,7 @@ export const translations = {
     bank_iban: 'IBAN',
     account_name: 'Account Name',
     transfer_note: 'Transfer the amount to the above account, then submit your order. Note: bank transfers may take time to arrive — USDT will be sent as soon as funds are received in our account.',
-    card_note: 'Credit card payment coming soon. Please use bank transfer for now.',
+    card_note: 'Pay securely via Paylink — supports Visa, Mastercard, Apple Pay & STC Pay.',
     order_success: 'Order submitted successfully! We will contact you soon.',
 
     pending: 'Pending',

@@ -37,7 +37,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: `الكمية يجب أن تكون بين ${min} و ${max} USDT` }, { status: 400 })
 
     const rate = getRateForAmount(usdt_amount, tiers)
-    const sar_amount = usdt_amount * rate
+    const sar_amount_base = usdt_amount * rate
+    // Apply 2% fee for card payments
+    const card_fee = payment_method === 'card' ? sar_amount_base * 0.02 : 0
+    const sar_amount = sar_amount_base + card_fee
     const db = getDb()
 
     // Create order in DB

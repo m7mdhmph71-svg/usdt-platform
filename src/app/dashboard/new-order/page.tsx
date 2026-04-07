@@ -56,7 +56,10 @@ export default function NewOrderPage() {
   // Compute current rate based on entered amount
   const amount = parseFloat(usdtAmount) || 0
   const currentRate = amount > 0 ? getRateForAmount(amount, settings.tiers) : settings.tiers[0]?.rate ?? 4.3
-  const sarAmount = amount > 0 ? (amount * currentRate).toFixed(2) : '0.00'
+  const sarAmountBase = amount > 0 ? amount * currentRate : 0
+  const cardFee = paymentMethod === 'card' ? sarAmountBase * 0.02 : 0
+  const sarAmountTotal = sarAmountBase + cardFee
+  const sarAmount = sarAmountTotal > 0 ? sarAmountTotal.toFixed(2) : '0.00'
 
   // Find which tier is active
   const activeTier = settings.tiers.find(t => amount >= t.min && amount <= t.max)
@@ -229,7 +232,19 @@ export default function NewOrderPage() {
                   <span className="text-slate-400">{isRtl ? 'السعر المطبّق:' : 'Rate applied:'}</span>
                   <span className="text-emerald-400 font-semibold">{currentRate} {isRtl ? 'ريال/USDT' : 'SAR/USDT'}</span>
                 </div>
-                <div className="flex justify-between items-center">
+                {paymentMethod === 'card' && (
+                  <>
+                    <div className="flex justify-between items-center text-sm mb-2">
+                      <span className="text-slate-400">{isRtl ? 'المبلغ الأساسي:' : 'Base amount:'}</span>
+                      <span className="text-white">{sarAmountBase.toFixed(2)} {isRtl ? 'ريال' : 'SAR'}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-sm mb-2">
+                      <span className="text-yellow-400">{isRtl ? 'رسوم البطاقة (2%):' : 'Card fee (2%):'}</span>
+                      <span className="text-yellow-400">+{cardFee.toFixed(2)} {isRtl ? 'ريال' : 'SAR'}</span>
+                    </div>
+                  </>
+                )}
+                <div className="flex justify-between items-center border-t border-slate-700 pt-2">
                   <span className="text-slate-400">{t.you_pay}</span>
                   <span className="text-2xl font-bold text-white">{sarAmount} <span className="text-slate-400 text-base">{isRtl ? 'ريال' : 'SAR'}</span></span>
                 </div>
